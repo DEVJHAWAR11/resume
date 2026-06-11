@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev Jhawar Resume</title>
+  <style>
+    :root{
+      --bg:#241f1a;
+      --text:#f5ede3;
+      --muted:#d4c5b3;
+      --accent:#c65f33;
+      --paper:#f6f1e8;
+      --shadow:0 18px 50px rgba(0,0,0,.22);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html, body{
+      width:100%;
+      min-height:100%;
+      overflow-x:hidden;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:Georgia, "Times New Roman", serif;
+      min-height:100vh;
+      padding:18px 16px 28px;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:16px;
+      font-size:15px;
+    }
+
+    .back-link{
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .back-link:hover{
+      color:#fff;
+    }
+
+    .print-btn{
+  appearance:none;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(198,95,51,.22);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+    .pdf-frame{
+      background:var(--paper);
+      border-radius:3px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      height:calc(100vh - 100px);
+      width:100%;
+      position:relative;
+    }
+
+    iframe{
+      width:100%;
+      height:100%;
+      border:none;
+      background:#fff;
+      display:block;
+      overflow:hidden;
+    }
+
+    .fallback{
+      display:none;
+      padding:24px;
+      color:#2b241e;
+      font-family:Arial,sans-serif;
+    }
+
+    @media (max-width: 640px){
+      body{
+        padding:12px;
+      }
+
+      .topbar{
+        flex-wrap:wrap;
+        align-items:flex-start;
+      }
+
+      .print-btn{
+        width:100%;
+      }
+
+      .pdf-frame{
+        height:78vh;
+      }
+    }
+
+    @media print{
+      body{
+        background:#fff;
+        padding:0;
+      }
+
+      .topbar{
+        display:none;
+      }
+
+      .pdf-frame{
+        box-shadow:none;
+        height:100vh;
+      }
+
+      iframe{
+        height:100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back-link" href="#">← back to portfolio</a>
+      <a class="print-btn" href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener noreferrer">
+  Open / Save PDF ↓
+</a>
+    </div>
+
+    <div class="pdf-frame">
+      <iframe
+        src="./Dev_Jhawar_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH"
+        title="Dev Jhawar Resume PDF"
+        scrolling="no">
+      </iframe>
+
+      <div class="fallback">
+        <p>The embedded PDF could not load in this environment.</p>
+        <p>
+          <a href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener noreferrer">
+            Open the resume PDF directly
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
