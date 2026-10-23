@@ -1,170 +1,411 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dev Jhawar Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dev Jhawar · Résumé</title>
+  <meta name="description" content="Résumé of Dev Jhawar: agentic AI systems, backend infrastructure and open source." />
+  <meta name="theme-color" content="#ebeae4" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1' y='1' width='22' height='22' fill='%23121317'/%3E%3Crect x='12' y='12' width='11' height='11' fill='%232b37e6'/%3E%3C/svg%3E" />
+  <link rel="preload" href="./Dev_Jhawar_Resume.pdf" as="fetch" type="application/pdf" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,700..900&family=Geist:wght@400..600&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet" />
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('theme-v2') || 'light'; } catch {}
+  </script>
   <style>
-    :root{
-      --bg:#241f1a;
-      --text:#f5ede3;
-      --muted:#d4c5b3;
-      --accent:#c65f33;
-      --paper:#f6f1e8;
-      --shadow:0 18px 50px rgba(0,0,0,.22);
+    /* Same tokens as devjhawar.com: light paper by default, dark is the same drawing at night. */
+    :root {
+      --bg: #ebeae4;
+      --panel: #f5f4ef;
+      --fg: #121317;
+      --muted: #55575f;
+      --faint: #66686f;
+      --edge: #c4c2b9;
+      --grid: rgb(18 19 23 / 0.16);
+      --accent: #2b37e6;
+      --accent-ink: #ffffff;
+      --accent-soft: rgb(43 55 230 / 0.09);
+      --ok: #177a40;
+      --sheet-shadow: 8px 8px 0 rgb(18 19 23 / 0.08);
+
+      --display: 'Archivo', 'Arial Narrow', ui-sans-serif, sans-serif;
+      --sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+      --bar: 3.75rem;
+      --gutter: clamp(1rem, 3vw, 2rem);
+      --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+      color-scheme: light;
+    }
+    :root[data-theme='dark'] {
+      --bg: #0f1013;
+      --panel: #16181d;
+      --fg: #ebeae4;
+      --muted: #a0a2a9;
+      --faint: #8b8d95;
+      --edge: #2b2e36;
+      --grid: rgb(235 234 228 / 0.09);
+      --accent: #7d87ff;
+      --accent-ink: #0f1013;
+      --accent-soft: rgb(125 135 255 / 0.12);
+      --ok: #5cc98a;
+      --sheet-shadow: 8px 8px 0 rgb(0 0 0 / 0.35);
+      color-scheme: dark;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* Page scrolls when it has to (phones), but never shows a scrollbar. */
+    html {
+      -webkit-text-size-adjust: 100%;
+      overflow-x: clip;
+      scrollbar-width: none;
+    }
+    html::-webkit-scrollbar { display: none; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background-color: var(--bg);
+      background-image: radial-gradient(var(--grid) 1px, transparent 1.3px);
+      background-size: 20px 20px;
+      color: var(--fg);
+      font: 400 1rem/1.6 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    ::selection { background: var(--accent); color: var(--accent-ink); }
+    .mono { font-family: var(--mono); font-size: 0.78rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      height: 2.2rem;
+      padding: 0 0.8rem;
+      border: 1px solid var(--fg);
+      font: 600 0.76rem/1 var(--mono);
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .btn:hover { background: var(--fg); color: var(--bg); }
+    .btn.solid { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .btn.solid:hover { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+
+    /* Header, same bar as the portfolio. */
+    .bar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--edge);
+    }
+    .bar .inner {
+      height: var(--bar);
+      padding-inline: var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .mark {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font: 800 1.15rem/1 var(--display);
+      font-stretch: 80%;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .who { display: grid; }
+    .who small {
+      margin-top: 0.2rem;
+      font: 500 0.58rem/1 var(--mono);
+      letter-spacing: 0.02em;
+      color: var(--faint);
+    }
+    .right { display: flex; align-items: center; gap: 0.5rem; }
+    .sq {
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      border: 1px solid var(--edge);
+      background: var(--panel);
+      transition: border-color 0.15s;
+    }
+    .sq:hover { border-color: var(--fg); }
+
+    /* Desktop: a slim facts column beside a sheet that fits the whole viewport. */
+    main {
+      display: grid;
+      grid-template-columns: 17rem minmax(0, 1fr);
+      gap: var(--gutter);
+      padding: calc(var(--bar) + var(--gutter)) var(--gutter) var(--gutter);
+      min-height: 100dvh;
     }
 
-    html, body{
-      width:100%;
-      min-height:100%;
-      overflow-x:hidden;
+    aside {
+      align-self: start;
+      position: sticky;
+      top: calc(var(--bar) + var(--gutter));
+      border: 1px solid var(--edge);
+      background: var(--panel);
+    }
+    aside > * { padding: 1.1rem 1.2rem; }
+    aside > * + * { border-top: 1px solid var(--edge); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .tag::before { content: ''; width: 0.5rem; height: 0.5rem; background: var(--accent); flex: none; }
+    h1 {
+      margin: 0.7rem 0 0.6rem;
+      font: 800 2.6rem/0.9 var(--display);
+      font-stretch: 72%;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+    .lede { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+    .label { margin-bottom: 0.2rem; color: var(--faint); font-size: 0.7rem; text-transform: lowercase; }
+
+    .links { display: grid; gap: 0.15rem; margin: 0; padding-left: 1.2rem; list-style: none; }
+    .links a {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      font-size: 0.88rem;
+      transition: color 0.15s;
+    }
+    .links a span { color: var(--faint); font-family: var(--mono); font-size: 0.72rem; }
+    .links a:hover { color: var(--accent); }
+    .actions { display: grid; gap: 0.5rem; }
+    .actions .btn { height: 2.6rem; }
+
+    /* The sheet. Its width is set from script so the whole page fits; the canvas is drawn at device resolution. */
+    .stage { display: grid; justify-items: center; align-content: start; min-width: 0; }
+    .sheet {
+      position: relative;
+      width: min(100%, 52rem);
+      aspect-ratio: 612 / 792;
+      background: #fff;
+      border: 1px solid var(--edge);
+      box-shadow: var(--sheet-shadow);
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+    }
+    .sheet.ready { opacity: 1; }
+    .sheet canvas { display: block; width: 100%; height: 100%; }
+    .sheet .hit { position: absolute; display: block; border-radius: 2px; transition: background 0.15s; }
+    .sheet .hit:hover { background: rgb(43 55 230 / 0.12); }
+    .loading {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--faint);
+    }
+    .sheet.ready .loading { display: none; }
+    .fallback { display: none; padding: 2rem; color: #121317; font-size: 0.95rem; text-align: center; }
+    .fallback a { color: #2b37e6; text-decoration: underline; }
+    .sheet.failed { opacity: 1; aspect-ratio: auto; }
+    .sheet.failed .fallback { display: block; }
+    .sheet.failed canvas, .sheet.failed .loading { display: none; }
+
+    .foot { margin: 0.9rem 0 0; color: var(--faint); text-align: center; }
+
+    /* Wide screens: an empty column on the right keeps the sheet centred on the page. */
+    @media (min-width: 1240px) {
+      main { grid-template-columns: 17rem minmax(0, 1fr) 17rem; }
     }
 
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:Georgia, "Times New Roman", serif;
-      min-height:100vh;
-      padding:18px 16px 28px;
+    /* Tablet and phone: the sheet goes edge to edge and the facts move under it. */
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
+      aside { position: static; order: 2; }
+      .stage { order: 1; }
+      .sheet { width: 100%; max-width: 52rem; }
+      h1 { font-size: 2.2rem; }
+    }
+    @media (max-width: 560px) {
+      :root { --gutter: 0.75rem; }
+      .bar .btn.ghost { display: none; }
+      .sheet { box-shadow: 4px 4px 0 rgb(18 19 23 / 0.08); }
     }
 
-    .wrap{
-      max-width:980px;
-      margin:0 auto;
+    @media print {
+      .bar, aside, .foot { display: none !important; }
+      body { background: #fff; }
+      main { display: block; padding: 0; }
+      .sheet { width: 100% !important; border: 0; box-shadow: none; }
     }
-
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      margin-bottom:16px;
-      font-size:15px;
-    }
-
-    .back-link{
-      color:var(--muted);
-      text-decoration:none;
-    }
-
-    .back-link:hover{
-      color:#fff;
-    }
-
-    .print-btn{
-  appearance:none;
-  border:none;
-  background:var(--accent);
-  color:#fff;
-  padding:10px 16px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 8px 20px rgba(198,95,51,.22);
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
-
-    .pdf-frame{
-      background:var(--paper);
-      border-radius:3px;
-      overflow:hidden;
-      box-shadow:var(--shadow);
-      height:calc(100vh - 100px);
-      width:100%;
-      position:relative;
-    }
-
-    iframe{
-      width:100%;
-      height:100%;
-      border:none;
-      background:#fff;
-      display:block;
-      overflow:hidden;
-    }
-
-    .fallback{
-      display:none;
-      padding:24px;
-      color:#2b241e;
-      font-family:Arial,sans-serif;
-    }
-
-    @media (max-width: 640px){
-      body{
-        padding:12px;
-      }
-
-      .topbar{
-        flex-wrap:wrap;
-        align-items:flex-start;
-      }
-
-      .print-btn{
-        width:100%;
-      }
-
-      .pdf-frame{
-        height:78vh;
-      }
-    }
-
-    @media print{
-      body{
-        background:#fff;
-        padding:0;
-      }
-
-      .topbar{
-        display:none;
-      }
-
-      .pdf-frame{
-        box-shadow:none;
-        height:100vh;
-      }
-
-      iframe{
-        height:100vh;
-      }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition-duration: 0.001ms !important; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <a class="back-link" href="#">← back to portfolio</a>
-      <a class="print-btn" href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener noreferrer">
-  Open / Save PDF ↓
-</a>
-    </div>
-
-    <div class="pdf-frame">
-      <iframe
-        src="./Dev_Jhawar_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH"
-        title="Dev Jhawar Resume PDF"
-        scrolling="no">
-      </iframe>
-
-      <div class="fallback">
-        <p>The embedded PDF could not load in this environment.</p>
-        <p>
-          <a href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener noreferrer">
-            Open the resume PDF directly
-          </a>
-        </p>
+  <header class="bar">
+    <div class="inner">
+      <a href="https://devjhawar.com/" class="mark">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <rect x="1" y="1" width="22" height="22" fill="var(--fg)" />
+          <rect x="12" y="12" width="11" height="11" fill="var(--accent)" />
+        </svg>
+        <span class="who">
+          <span>Dev Jhawar</span>
+          <small>résumé</small>
+        </span>
+      </a>
+      <div class="right">
+        <button class="sq" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+            <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3" />
+            <path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" />
+          </svg>
+        </button>
+        <a class="btn ghost" href="https://devjhawar.com/">Portfolio ↗</a>
+        <a class="btn solid" href="./Dev_Jhawar_Resume.pdf" download="Dev_Jhawar_Resume.pdf">Download ↓</a>
       </div>
     </div>
-  </div>
+  </header>
+
+  <main>
+    <aside>
+      <div>
+        <span class="tag">Résumé · Oct 2026</span>
+        <h1>Dev Jhawar</h1>
+        <p class="lede">I build agentic AI systems and the backend infrastructure they run on.</p>
+      </div>
+      <ul class="links">
+        <li class="label mono">More projects</li>
+        <li><a href="https://watch-tower-seven.vercel.app" target="_blank" rel="noopener">WatchTower <span>web alerts ↗</span></a></li>
+        <li><a href="https://github.com/DEVJHAWAR11/Tidyflow" target="_blank" rel="noopener">TidyFlow <span>file sorter ↗</span></a></li>
+        <li><a href="https://devjhawar.com/#projects">All projects <span>portfolio ↗</span></a></li>
+      </ul>
+      <ul class="links">
+        <li><a href="https://github.com/DEVJHAWAR11" target="_blank" rel="noopener">GitHub <span>DEVJHAWAR11 ↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/dev-jhawar11/" target="_blank" rel="noopener">LinkedIn <span>dev-jhawar11 ↗</span></a></li>
+        <li><a href="mailto:dev.jhawar.cs@gmail.com">Email <span>dev.jhawar.cs ↗</span></a></li>
+      </ul>
+      <div class="actions">
+        <a class="btn solid" href="./Dev_Jhawar_Resume.pdf" download="Dev_Jhawar_Resume.pdf">Download PDF ↓</a>
+        <a class="btn" href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener">Open in new tab ↗</a>
+      </div>
+    </aside>
+
+    <div class="stage">
+      <div class="sheet" id="sheet" role="img" aria-label="Dev Jhawar's résumé, one page">
+        <canvas id="canvas"></canvas>
+        <div class="loading mono">rendering résumé…</div>
+        <div class="fallback">
+          <p>The résumé couldn't be drawn here.</p>
+          <p><a href="./Dev_Jhawar_Resume.pdf" target="_blank" rel="noopener">Open the PDF directly</a></p>
+        </div>
+      </div>
+      <p class="foot mono">one page · last updated Oct 2026</p>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('theme-toggle');
+    const syncLabel = () => toggle.setAttribute('aria-label', root.dataset.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    syncLabel();
+    toggle.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      const apply = () => { root.dataset.theme = next; syncLabel(); };
+      if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(apply);
+      else apply();
+      try { localStorage.setItem('theme-v2', next); } catch {}
+    });
+
+    const PDF_URL = './Dev_Jhawar_Resume.pdf';
+    const sheet = document.getElementById('sheet');
+    const canvas = document.getElementById('canvas');
+    const stage = sheet.parentElement;
+    let page, task, lastKey = '';
+
+    // Desktop shows the whole page at once; if that would make the text too small, fall back to fitting the width.
+    function fitWidth() {
+      const [, , w, h] = page.view;
+      const ratio = w / h;
+      const avail = stage.clientWidth;
+      if (matchMedia('(max-width: 960px)').matches) return Math.min(avail, 832);
+      const cs = getComputedStyle(document.querySelector('main'));
+      const foot = document.querySelector('.foot').offsetHeight + 14;
+      const height = innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - foot;
+      const whole = Math.min(avail, height * ratio);
+      return whole >= 560 ? whole : Math.min(avail, 832);
+    }
+
+    async function draw() {
+      const cssW = Math.floor(fitWidth());
+      sheet.style.width = cssW + 'px';
+      // Extra resolution so pinch-zoom on phones stays sharp, capped to keep memory sane.
+      const dpr = Math.min((window.devicePixelRatio || 1) * (cssW < 600 ? 2 : 1.25), 4);
+      const scale = Math.min((cssW * dpr) / page.view[2], 4000 / page.view[2]);
+      const key = cssW + ':' + scale.toFixed(3);
+      if (key === lastKey) return;
+      lastKey = key;
+      const viewport = page.getViewport({ scale });
+      if (task) task.cancel();
+      const off = document.createElement('canvas');
+      off.width = Math.round(viewport.width);
+      off.height = Math.round(viewport.height);
+      task = page.render({ canvasContext: off.getContext('2d'), viewport });
+      try { await task.promise; } catch (e) { if (e && e.name === 'RenderingCancelledException') return; throw e; }
+      canvas.width = off.width;
+      canvas.height = off.height;
+      canvas.getContext('2d').drawImage(off, 0, 0);
+      sheet.classList.add('ready');
+    }
+
+    // Clickable links laid over the canvas, positioned in percent so they never need recomputing.
+    async function addLinks() {
+      const [x0, y0, x1, y1] = page.view;
+      const W = x1 - x0, H = y1 - y0;
+      for (const a of await page.getAnnotations()) {
+        if (a.subtype !== 'Link' || !(a.url || a.unsafeUrl)) continue;
+        const [ax0, ay0, ax1, ay1] = a.rect;
+        const el = document.createElement('a');
+        el.className = 'hit';
+        el.href = a.url || a.unsafeUrl;
+        if (!el.href.startsWith('mailto:') && !el.href.startsWith('tel:')) { el.target = '_blank'; el.rel = 'noopener'; }
+        el.setAttribute('aria-label', el.href.replace(/^(https?:\/\/|mailto:|tel:)/, ''));
+        el.style.left = ((ax0 - x0) / W) * 100 + '%';
+        el.style.top = ((y1 - ay1) / H) * 100 + '%';
+        el.style.width = ((ax1 - ax0) / W) * 100 + '%';
+        el.style.height = ((ay1 - ay0) / H) * 100 + '%';
+        sheet.appendChild(el);
+      }
+    }
+
+    async function init() {
+      if (!window.pdfjsLib) throw new Error('pdf.js missing');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const doc = await pdfjsLib.getDocument(PDF_URL).promise;
+      page = await doc.getPage(1);
+      sheet.style.aspectRatio = page.view[2] + ' / ' + page.view[3];
+      await draw();
+      addLinks();
+      let t;
+      new ResizeObserver(() => { clearTimeout(t); t = setTimeout(draw, 120); }).observe(stage);
+      addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 120); });
+    }
+
+    init().catch(() => sheet.classList.add('failed'));
+  </script>
 </body>
 </html>
